@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Player;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,9 @@ class PlayerFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'team_id' => Team::factory(),
+            'name' => fake()->firstNameMale().' '.fake()->lastName(),
+            'position' => fake()->randomElement(['G', 'F', 'C']),
         ];
     }
 }

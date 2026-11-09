@@ -18,7 +18,9 @@ class TeamFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->unique()->word(),
+            'city' => fake()->city(),
+            'conference' => fake()->randomElement(['East', 'West']),
         ];
     }
 }
