@@ -29,4 +29,42 @@ class TeamController extends Controller
             'search' => $search,
         ]);
     }
+
+    public function show(Team $team): View
+    {
+        $games = $team->games()
+            ->with('homeTeam', 'awayTeam')
+            ->orderByDesc('played_at')
+            ->get();
+
+        $played = $games->count();
+        $wins = 0;
+        $pointsFor = 0;
+        $pointsAgainst = 0;
+
+        foreach ($games as $game) {
+            $pointsFor += $game->pointsFor($team);
+            $pointsAgainst += $game->pointsAgainst($team);
+
+            if ($game->wonBy($team)) {
+                $wins++;
+            }
+        }
+
+        $losses = $played - $wins;
+        $winPercent = $played > 0 ? round($wins / $played * 100) : 0;
+        $avgFor = $played > 0 ? round($pointsFor / $played, 1) : 0;
+        $avgAgainst = $played > 0 ? round($pointsAgainst / $played, 1) : 0;
+
+        return view('teams.show', [
+            'team' => $team,
+            'players' => $team->players()->orderBy('name')->get(),
+            'lastGames' => $games->take(5),
+            'wins' => $wins,
+            'losses' => $losses,
+            'winPercent' => $winPercent,
+            'avgFor' => $avgFor,
+            'avgAgainst' => $avgAgainst,
+        ]);
+    }
 }

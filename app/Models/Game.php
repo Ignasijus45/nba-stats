@@ -29,4 +29,29 @@ class Game extends Model
     {
         return $this->belongsTo(Team::class, 'away_team_id');
     }
+
+    public function isHomeTeam(Team $team): bool
+    {
+        return $this->home_team_id === $team->id;
+    }
+
+    public function pointsFor(Team $team): int
+    {
+        return $this->isHomeTeam($team) ? $this->home_score : $this->away_score;
+    }
+
+    public function pointsAgainst(Team $team): int
+    {
+        return $this->isHomeTeam($team) ? $this->away_score : $this->home_score;
+    }
+
+    public function wonBy(Team $team): bool
+    {
+        return $this->pointsFor($team) > $this->pointsAgainst($team);
+    }
+
+    public function opponentOf(Team $team): Team
+    {
+        return $this->isHomeTeam($team) ? $this->awayTeam : $this->homeTeam;
+    }
 }

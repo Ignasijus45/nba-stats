@@ -20,7 +20,7 @@
             </tr>
             @forelse ($teams as $team)
                 <tr>
-                    <td>{{ $team->city }} <strong>{{ $team->name }}</strong></td>
+                    <td><a href="/teams/{{ $team->id }}" class="text-decoration-none">{{ $team->city }} <strong>{{ $team->name }}</strong></a></td>
                     <td><span class="badge bg-secondary">{{ $team->conference }}</span></td>
                     <td class="text-end">{{ $team->players_count }}</td>
                 </tr>
